@@ -4,7 +4,13 @@ if (Meteor.isClient) {
 	Template.hello.results = function() {
 		Results.find({});
 	};
-	var io = new importio(meta);
+	var io;
+	Template.hello.rendered = function() {
+		if(!this._rendered) {
+			this._rendered = true;
+			io = new importio(function(){});
+		}
+	};
 	Template.hello.events({
 		"click input": function() {
 			var signedQuery = Meteor.call('signQuery',{
