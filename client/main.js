@@ -20,7 +20,7 @@ if (Meteor.isClient) {
 				if(err) return console.error(err);
 				io.query(signedQuery,function(message){
 					if(message.data.type == 'MESSAGE') {
-						results[message.data.requestId] = message.data.data.results;
+						results[message.data.requestId] = _.pluck(message.data.data.results,'location/name');
 						Session.set('requestId',message.data.requestId);
 					} else {
 						console.log(message.data);
