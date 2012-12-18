@@ -2,7 +2,7 @@ Results = new Meteor.Collection('results');
 
 if (Meteor.isClient) {
 	Template.hello.results = function() {
-		Results.find({});
+		return Results.find({});
 	};
 	var io;
 	Template.hello.rendered = function() {
