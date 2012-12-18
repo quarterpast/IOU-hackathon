@@ -7,20 +7,19 @@ if (Meteor.isServer) {
 	Meteor.startup(function () {
 		Meteor.methods({
 			signQuery: function(query){
-				var signedQuery = {
+				var signed_query = {
 					queryJson: JSON.stringify(query),
 					expiresAt: new Date().getTime() + 10*60*1e3,
 					userGuid: 'f58f10ff-2bc3-45ea-b560-458ec30d1469',
 					orgGuid: "00000000-0000-0000-0000-000000000000"
 				};
 
-				var hmac = crypto.createHmac('sha1',new Buffer(apikey,'base64').toString('binary'));
-				hmac.update(
-					signedQuery.queryJson+':'+signedQuery.userGuid+':'+signedQuery.orgGuid+':'+signedQuery.expiresAt
-				);
-				signedQuery.digest = hmac.digest('base64');
+				var check = signed_query.queryJson + ":" + signed_query.userGuid + ":" + signed_query.orgGuid + ":" + signed_query.expiresAt;
 
-				return signedQuery;
+				signed_query.digest = crypto.createHmac("sha1", new Buffer(key, "base64").toString("binary")).update(check).digest('base64');
+
+
+				return signed_query;
 			}
 		});
 	});
