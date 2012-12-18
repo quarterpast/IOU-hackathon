@@ -13,14 +13,16 @@
 </head>
 
 <body>
-	<header class="navbar">
-		<nav class="navbar-inner">
-			<a class="brand" href="#">Relocatr</a>
-			<form class="navbar-form pull-right form-search">
-				<input type="text" class="input-medium search-query">
-				<input type="button" class="btn" value="Search" />
-			</form>
-		</nav>
-	</header>
-	{{> main}}
+	<div class="container-fluid">
+		<header class="navbar-fixed-top">
+			<nav class="navbar-inner">
+				<a class="brand" href="#">Relocatr</a>
+				<form class="navbar-form pull-right form-search">
+					<input type="text" class="input-medium search-query">
+					<input type="button" class="btn" value="Search" />
+				</form>
+			</nav>
+		</header>
+		{{> main}}
+	</div>
 </body>
