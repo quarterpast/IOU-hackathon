@@ -24,8 +24,8 @@ if (Meteor.isClient) {
 						_.each(message.data.data.results,function(result){
 							Results.insert({name:results['location/name']});
 						});
-					} else if(message.data.type == 'MESSAGE') {
-						console.error(message.data)
+					} else {
+						console.error(message);
 					}
 				});
 			});
