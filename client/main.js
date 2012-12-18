@@ -1,5 +1,3 @@
-Results = new Meteor.Collection('results');
-
 if (Meteor.isClient) {
 	Template.hello.results = function() {
 		return Results.find({});
