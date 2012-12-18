@@ -1,16 +1,16 @@
 if (Meteor.isClient) {
 	var results = {};
-	Template.base.result = function() {
+	Template.main.result = function() {
 		return results[Session.get('requestId')];
 	};
 	var io;
-	Template.base.rendered = function() {
+	Template.main.rendered = function() {
 		if(!this._rendered) {
 			this._rendered = true;
 			io = new importio(function(){});
 		}
 	};
-	Template.base.events({
+	Template.main.events({
 		"click input": function() {
 			Meteor.call('signQuery',{
 				requestId: 'request-'+Date.now(),
