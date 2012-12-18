@@ -1,5 +1,5 @@
 if (Meteor.isServer) {
-	var require = ___meteor_bootstrap__.require;
+	var require = __meteor_bootstrap__.require;
 
 	var crypto = require('crypto'),
 	    apikey = '75pMfISX+QY7X4iTeoJe/wzHPjbWpZz/kR2sOkfipuklFldbviYykN20hUvGxWIVPgyD0+FJYF3WWCgy4t4DKQ==';
