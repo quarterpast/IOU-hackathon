@@ -1,18 +1,24 @@
+Results = new Meteor.Collection('results');
+
 if (Meteor.isClient) {
-  Template.hello.greeting = function () {
-    return "Welcome to test.";
-  };
-
-  Template.hello.events({
-    'click input' : function () {
-      // template data, if any, is available in 'this'
-	this.greeting = 'Do not press this button again.'
-     }
-  });
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
+	Template.hello.results = function() {
+		Results.find({});
+	};
+	var io = new importio(meta);
+	Template.hello.events({
+		"click input": function() {
+			var signedQuery = Meteor.call('signQuery',{
+				requestId: 'request-'+Date.now(),
+				connectorGuids: ['79d826f8-f2ce-4267-bb2a-84fcda7a5c47'],
+				query: {'location/street_address/postal_code/postal_code': 'ec1y 2bj'}
+			});
+			io.query(signedQuery,function(message){
+				if(message.data.type == 'MESSAGE') {
+					_.each(message.data.data.results,function(result){
+						Results.insert({name:results['location/name']});
+					});
+				}
+			});
+		}
+	});
 }

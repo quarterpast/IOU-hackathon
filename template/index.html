@@ -17,7 +17,11 @@
 </body>
 
 <template name="hello">
-	<h1>Heltestlo World!</h1>
-	{{greeting}}
+	<h1>Test import&bull;io</h1>
 	<input type="button" value="Click" />
+	<ul>
+		{{#each result}}
+		<li>{{name}}</li>
+		{{/each}}
+	</ul>
 </template>
