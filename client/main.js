@@ -25,7 +25,7 @@ if (Meteor.isClient) {
 							Results.insert({name:results['location/name']});
 						});
 					} else {
-						console.error(message);
+						console.log(message.data);
 					}
 				});
 			});

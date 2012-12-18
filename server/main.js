@@ -16,13 +16,7 @@ if (Meteor.isServer) {
 
 				var hmac = crypto.createHmac('sha1',new Buffer(apikey,'base64'));
 				hmac.update(
-					signedQuery.queryJson
-					+ ':'
-					+ signedQuery.userGuid
-					+ ':'
-					+ signedQuery.orgGuid
-					+ ':'
-					+ signedQuery.expiresAt.toString(10)
+					signedQuery.queryJson+':'+signedQuery.userGuid+':'+signedQuery.orgGuid+':'+signedQuery.expiresAt
 				);
 
 				signedQuery.digest = hmac.digest('base64');
