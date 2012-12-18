@@ -15,13 +15,15 @@ if (Meteor.isServer) {
 				};
 
 				var hmac = crypto.createHmac('sha1',new Buffer(apikey,'base64'));
-				hmac.update(signedQuery.queryJson);
-				hmac.update(':');
-				hmac.update(signedQuery.userGuid);
-				hmac.update(':');
-				hmac.update(signedQuery.orgGuid);
-				hmac.update(':');
-				hmac.update(signedQuery.expiresAt.toString(10));
+				hmac.update(
+					signedQuery.queryJson
+					+ ':'
+					+ signedQuery.userGuid
+					+ ':'
+					+ signedQuery.orgGuid
+					+ ':'
+					+ signedQuery.expiresAt.toString(10)
+				);
 
 				signedQuery.digest = hmac.digest('base64');
 
