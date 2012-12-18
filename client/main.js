@@ -1,6 +1,7 @@
 if (Meteor.isClient) {
+	var results = {};
 	Template.hello.results = function() {
-		return Results.find({});
+		return results[Session.get('requestId')];
 	};
 	var io;
 	Template.hello.rendered = function() {
@@ -19,9 +20,8 @@ if (Meteor.isClient) {
 				if(err) return console.error(err);
 				io.query(signedQuery,function(message){
 					if(message.data.type == 'MESSAGE') {
-						_.each(message.data.data.results,function(result){
-							Results.insert({name:result['location/name']});
-						});
+						results[message.data.requestId] = message.data.data.results;
+						Session.set('requestId',message.data.requestId);
 					} else {
 						console.log(message.data);
 					}
