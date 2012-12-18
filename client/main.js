@@ -22,7 +22,7 @@ if (Meteor.isClient) {
 				io.query(signedQuery,function(message){
 					if(message.data.type == 'MESSAGE') {
 						_.each(message.data.data.results,function(result){
-							Results.insert({name:results['location/name']});
+							Results.insert({name:result['location/name']});
 						});
 					} else {
 						console.log(message.data);
