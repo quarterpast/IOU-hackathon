@@ -14,11 +14,10 @@ if (Meteor.isServer) {
 					orgGuid: "00000000-0000-0000-0000-000000000000"
 				};
 
-				var hmac = crypto.createHmac('sha1',new Buffer(apikey,'base64'));
+				var hmac = crypto.createHmac('sha1',new Buffer(apikey,'base64').toString('binary'));
 				hmac.update(
 					signedQuery.queryJson+':'+signedQuery.userGuid+':'+signedQuery.orgGuid+':'+signedQuery.expiresAt
 				);
-
 				signedQuery.digest = hmac.digest('base64');
 
 				return signedQuery;
