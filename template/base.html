@@ -13,15 +13,14 @@
 </head>
 
 <body>
-	{{> hello}}
+	<header class="navbar">
+		<nav class="navbar-inner">
+			<a class="brand" href="#">Relocatr</a>
+			<form class="navbar-form pull-right form-search">
+				<input type="text" class="input-medium search-query">
+				<input type="button" class="btn" value="Search" />
+			</form>
+		</nav>
+	</header>
+	{{> main}}
 </body>
-
-<template name="hello">
-	<h1>Test import&bull;io</h1>
-	<input type="button" value="Click" />
-	<ul>
-		{{#each result}}
-		<li>{{.}}</li>
-		{{/each}}
-	</ul>
-</template>
