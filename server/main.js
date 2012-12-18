@@ -21,7 +21,7 @@ if (Meteor.isServer) {
 				hmac.update(':');
 				hmac.update(signedQuery.orgGuid);
 				hmac.update(':');
-				hmac.update(signedQuery.expiresAt);
+				hmac.update(signedQuery.expiresAt.toString(10));
 
 				signedQuery.digest = hmac.digest('base64');
 
