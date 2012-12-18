@@ -1,6 +1,6 @@
 if (Meteor.isClient) {
 	var results = {};
-	Template.hello.results = function() {
+	Template.hello.result = function() {
 		return results[Session.get('requestId')];
 	};
 	var io;
