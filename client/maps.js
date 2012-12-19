@@ -4,16 +4,7 @@ if (Meteor.isClient) {
 	var io;
 	var map;
 	
-	function cacheSchools() {
-		
-		Meteor.http.get("https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A", function(err, results) {
-			console.log(results);
-			
-		});
-		
-		//SchoolData
-		
-	}
+	
 	
 	function getJobDaytr(jobSearchTerm, gotDaytr)
 	{
@@ -141,6 +132,10 @@ if (Meteor.isClient) {
 		
 		var engineeringJobs;
 		var jobMapData = [];
+		
+		Meteor.call('getSchools',function(err,results) {
+			console.log(results);
+		});
 		
 		getJobDaytr("Engineering", function(allResults) {
 			engineeringJobs = allResults;
