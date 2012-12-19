@@ -51,7 +51,7 @@ function geocodeAddress(addressString, callback) {
 	});
 }
 
-var heatmap;
+var heatmap, searchquery;
 
 Session.set('searchicon','<i class="icon-search"></i>');
 Template.header.searchIcon = function() {
@@ -60,16 +60,17 @@ Template.header.searchIcon = function() {
 
 Template.header.events({
 	"blur input": function(ev) {
-		Session.set("searchquery",ev.target.value)
+		searchquery = ev.target.value;
 	},
 	"click button": function(ev) {
 		ev.preventDefault();
+		if(searchquery == null) return;
 
 		$(ev.target).attr('disabled','disabled');
 		Session.set('searchicon','<img src="/load.gif">')
 
-		getJobDaytr(Session.get("searchquery"), function(allResults) {
-			if(heatmap != null) heatmap.setMap(null);
+		if(heatmap != null) heatmap.setMap(null);
+		getJobDaytr(searchquery, function(allResults) {
 			var jobMapData = []
 			_.chain(allResults)
 			.pluck("employment_tenure/person/places_lived/location/topic:name")
