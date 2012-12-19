@@ -1,24 +1,50 @@
 if (Meteor.isClient) {
 	
 	var geocodr;
-	
+	var io;
 	var map;
 	
-	function getJobDatr(jobSearchTerm)
+	function getJobDaytr(jobSearchTerm, gotDaytr)
 	{
+		completeResults = [];
+		
 		Meteor.call('signQuery',{
 			requestId: 'request-'+Date.now()+'-'+jobSearchTerm,
-			connectorGuids: _.chain(connectrs).values().reject(_.isEmpty),
-			input: {'location/street_address/postal_code/postal_code': 'ec1y 2bj'}
+			connectorGuids: _.chain(connectrs).values().reject(_.isEmpty).value(),
+			input: {'job_title/topic:description': jobSearchTerm},
+			maxPages: 100
 		},function(err,signedQuery) {
 			if(err) return console.error(err);
+			console.log(signedQuery);
+			//track the progress of the query
+			jobsSpawned = 0;
+			jobsStarted = 0;
+			jobsCompleted = 0;
+			
 			io.query(signedQuery,function(message){
-				if(message.data.type == 'MESSAGE') {
-					results[message.data.requestId] = _.pluck(message.data.data.results,'location/name');
-					Session.set('requestId',message.data.requestId);
-				} else {
-					console.log(message.data);
+				console.log(message);
+				switch(message.data.type)
+				{
+				case 'SPAWN':
+					jobsSpawned++;
+					break;
+				case 'INIT':
+				case 'START':
+					jobsStarted++;
+					break;
+	
+				case 'STOP':
+					jobsCompleted++;
+					break;
+				case 'MESSAGE':
+					completeResults = completeResults.concat(message.data.data.results);
+					//do something with this: message.data.data.results
 				}
+				
+				finished = jobsStarted == jobsCompleted && jobsSpawned == jobsStarted -1 && jobsStarted > 0;
+				//if we have all the returned data then call this callback to tell 
+				if(finished) gotDaytr(completeResults);
+				
 			});
 		});
 	}
@@ -26,10 +52,12 @@ if (Meteor.isClient) {
 	function geocodeAddress(addressString, callback)
 	{
 		//convert the result to a latlng instead of the horrible crap that google sends back
-		geocodr.geocode( {address: addressString}, function(results, status)
-				{
-					callback(results[0].geometry.location);
-				});
+//		geocodr.geocode( {address: addressString}, function(results, status)
+//				{
+//					console.log(status);
+//					if(status == google.maps.GeocoderStatus.OK)
+//						callback(results[0].geometry.location);
+//				});
 		
 	}
 	
@@ -66,6 +94,9 @@ if (Meteor.isClient) {
 		
 		geocodr = new google.maps.Geocoder;
 		
+		//start up import.io link
+		io = new importio(function(){});
+		
 		map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 		
 		 var blobbyness = [
@@ -99,6 +130,21 @@ if (Meteor.isClient) {
 				  alert("you clicked the box, biatch");
 			  });
 		  });
+		  
+		  var engineeringJobs;
+		  var jobMapData = [];
+		  
+		  getJobDaytr("Engineering", function(allResults) {
+			  engineeringJobs = allResults;
+			  
+			  _.each(_.pluck(engineeringJobs,"employment_tenure/person/places_lived/location/topic:name"),function(locationString) {
+				  geocodeAddress(locationString,function(latLng) {
+					  jobMapData.push(latLng);
+				  });
+			  });
+
+		  });
+		 
 		  
 		  var heatmap = new google.maps.visualization.HeatmapLayer({
 		  	  data: blobbyness,
