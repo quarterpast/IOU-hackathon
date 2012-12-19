@@ -91,7 +91,7 @@ Template.header.events({
 					console.log(geo.latLng);
 					jobMapData.push(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za));
 				} else geocodeAddress(locationString,function(err,latLng) {
-					if(err) return;
+					if(err) return console.log(err);
 					GeocodeResults.insert({loc:locationString,latLng:latLng});
 					jobMapData.push(latLng);
 				});
