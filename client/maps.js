@@ -1,16 +1,44 @@
 if (Meteor.isClient) {
 	
-
-	function convertTextLocationToLatLng(location) {
+	var geocodr;
+	
+	var map;
+	
+	function geocodeAddress(addressString, callback)
+	{
+		//convert the result to a latlng instead of the horrible crap that google sends back
+		geocodr.geocode( {address: addressString}, function(results, status)
+				{
+					callback(results[0].geometry.location);
+				});
 		
-		var geometry = Meteor.http.get("http://maps.googleapis.com/maps/api/geocode/json?address="+location+"&sensor=false").geometry;
-		
-		return geometry.location;
+	}
+	
+	function pinLocation(latLng, clickCallback)
+	{
+		var pinImage = google.maps.MarkerImage('/favicon.png',new google.maps.Size(16,16), new google.maps.Point(0,0), new google.maps.Point(16,16));
+		var addedPin = new google.maps.Marker({position: latLng,map: map, icon: pinImage});
+		google.maps.event.addListener(addedPin, 'click', clickCallback);
 	}
 	
 	Template.map.rendered = function initialize() {
 		
 		Meteor.flush();
+		
+		//set up the main variables here....
+		var greenwich = new google.maps.LatLng(51.46,0.2);
+		
+		var mapOptions = {
+			    center: greenwich,
+			    zoom: 8,
+			    mapTypeId: google.maps.MapTypeId.ROADMAP
+			  };
+		
+		geocodr = new google.maps.Geocoder;
+		
+		//alert(document.getElementById("map_canvas"));
+		
+		map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 		
 		 var blobbyness = [
 			  new google.maps.LatLng(51.46,0.0),
@@ -34,23 +62,27 @@ if (Meteor.isClient) {
 			  new google.maps.LatLng(52.46,-2.1)
 		  ];
 		  
-		  var greenwich = new google.maps.LatLng(51.46,0.2);
+//		  
+//		  var location = "Norwich";
+//		  geocodeAddress(location, function(latLng) {
+//			  console.log(location, latLng);
+//			  
+//			  pinLocation(latLng, function() {
+//				  //Hi brennan, look at google.maps.InfoWindow here for displaying data.... http://www.evoluted.net/thinktank/web-development/google-maps-api-v3-custom-location-pins
+//				  alert("you clicked the box, biatch");
+//			  });
+//		  });
 		  
-		  console.log(convertTextLocationToLatLng("Norwich"));    	  
-	  var mapOptions = {
-	    center: greenwich,
-	    zoom: 8,
-	    mapTypeId: google.maps.MapTypeId.ROADMAP
-	  };
+		  
+		  
+		      	  
 	  
-	  var map = new google.maps.Map(document.getElementById("map_canvas"),
-	      mapOptions);
 	  
-	  var heatmap = new google.maps.visualization.HeatmapLayer({
-	  	  data: blobbyness,
-	  	  radius: 50
-	  });
-	  
-	  heatmap.setMap(map);
+		  var heatmap = new google.maps.visualization.HeatmapLayer({
+		  	  data: blobbyness,
+		  	  radius: 50
+		  });
+		  
+		  heatmap.setMap(map);
 	}
 }
