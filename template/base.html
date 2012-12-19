@@ -12,6 +12,7 @@
 	<!-- import•io js client library -->
 	<script type="text/javascript" src="//d7xe6yl2ckrgs.cloudfront.net/js/0.2-matt-testing/importio.js"></script>
 
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
 
 	<!-- local javascript shite -->
@@ -19,7 +20,7 @@
 </head>
 
 <body>
-	<header class="navbar navbar-fixed-top">
+	<header class="navbar navbar-fixed-top not-fixed">
 		<nav class="navbar-inner">
 			<a class="brand" href="#">
 				<img src="/logo-dark.png" alt="Relocatr" height="48" width="228">
@@ -30,7 +31,7 @@
 			</form>
 		</nav>
 	</header>
-	<div class="container-fluid">
+	<div class="container-fluid full-height">
 		{{> map}}
 	</div>
 </body>
