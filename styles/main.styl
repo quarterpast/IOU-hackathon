@@ -1,3 +1,12 @@
+calc()
+	if current-property
+		for prefix in vendors
+			arguments = unquote(arguments)
+			add-property(current-property[0], s('-%s-calc(%s)', prefix, arguments))
+		s('calc()', arguments)
+	else
+		error('calc() must be used within a property')
+
 .navbar
 	.brand
 		margin 0
@@ -9,9 +18,12 @@
 		input, button
 			margin 0
 
+	&.navbar-fixed-top
+		position static
+
 .container-fluid
-	margin-top 48px
-	height 100%
+	height calc('100% - 49px')
+	padding 0
 html
 	height: 100%
 body
