@@ -7,7 +7,7 @@ function geocodeAddress(addressString, callback) {
 		"http://nominatim.openstreetmap.org/search",
 		{params:{q:addressString,format:'json',countrycodes:'gb',emailaddress:'matt@relocatr.co.uk'}},
 		function(err,result) {
-			if(err) callback(err);
+			if(err || result.data.length == 0) callback(err);
 			callback(null,{Ya:result.data[0].lat,Za:result.data[0].lon});
 		}
 	);
