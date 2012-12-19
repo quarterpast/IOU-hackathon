@@ -4,17 +4,6 @@ if (Meteor.isServer) {
 	var crypto = require('crypto'),
 	apikey = '75pMfISX+QY7X4iTeoJe/wzHPjbWpZz/kR2sOkfipuklFldbviYykN20hUvGxWIVPgyD0+FJYF3WWCgy4t4DKQ==';
 	
-	//server side geocoder
-	function geocodeAddress(addressString, callback) {
-		//convert the result to a latlng instead of the horrible crap that google sends back
-		geocodr.geocode({address: addressString}, function(results, status) {
-			console.log(status);
-			if(status == google.maps.GeocoderStatus.OK)
-				callback(results[0].geometry.location);
-		});
-	}
-	
-	
 	Meteor.startup(function () {
 		Meteor.methods({
 			signQuery: function(query){
@@ -36,15 +25,19 @@ if (Meteor.isServer) {
 				
 				schoolRequest = Meteor.http.call("GET","https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A",{auth: "nick.scott@import.io:Neyfer!113"})
 				
+				SchoolData.remove({});
 				_.each(schoolRequest.data.results,function(result) {
-					if(SchoolData.findOne({title: result.title}) {
+					if(SchoolData.findOne({title: result.title})) {
 						//do nothing here
 						console.log("found in cache " + result);
 					}
 					else {
+						geocodeAddress(result.location.address, function(err,latLng) {
+							if(err) console.log(err)
+							else console.log("inserting school " + result.location.address + " geocode: " + latLng);
+						});
+						//SchoolData.insert({title: result.title, latLng: geocodeAddress(result.location.address) });
 						
-						SchoolData.insert({title: result.title, latLng:geocodeAddress(result.location.address)});
-						console.log("inserting school into cache" + result);
 						
 					}
 						
