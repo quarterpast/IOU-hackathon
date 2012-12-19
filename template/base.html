@@ -17,17 +17,7 @@
 </head>
 
 <body>
-	<header class="navbar navbar-fixed-top not-fixed">
-		<nav class="navbar-inner">
-			<a class="brand" href="#">
-				<img src="/logo-dark.png" alt="Relocatr" height="48" width="228">
-			</a>
-			<form class="navbar-form pull-right form-search">
-				<input type="text" class="input-medium search-query" placeholder="Search for jobs&hellip;">
-				<button class="btn"><i class="icon-search"></i></button>
-			</form>
-		</nav>
-	</header>
+	{{> header}}
 	<div class="container-fluid full-height">
 		{{> map}}
 	</div>

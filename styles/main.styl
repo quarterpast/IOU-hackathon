@@ -11,7 +11,7 @@ body
 	margin: 0
 	padding: 0
 
-body
+*
 	font-family "Roboto Light"
 	font-size 16px
 	line-height 24px
@@ -63,12 +63,40 @@ noisy-bg()
 	.brand
 		margin 0
 		padding 0
+		&:hover
+			border 0 none
+		img
+			width 285px
+			height 60px
+
+	.navbar-inner
+		border-bottom-color #aaa
 
 	.navbar-form
-		line-height 48px
+		line-height 60px
 		margin-right 10px
 		input, button
 			margin 0
+		.search-query
+			height 28px
+			border-radius 18px
+			font-size 18px
+
+		.input-append
+			margin 0
+			.search-query
+				border-radius right 0
+			.btn.add-on
+				i
+					font-size 19px
+					line-height 1em
+				box-sizing content-box
+				margin-left -1px
+				height 28px
+				width 28px
+				border-radius right 18px
+				border-color #0044cc #0044cc #002a80
+				text-shadow 0 -1px 0 #001230
 
 	&.navbar-fixed-top
 		position static
@@ -77,7 +105,7 @@ noisy-bg()
 	padding 0
 	height 100%
 	&.container-fluid
-		height calc('100% - 49px')
+		height calc('100% - 60px - 1px')
 
 #map_canvas
 	height: 100%
@@ -86,8 +114,8 @@ noisy-bg()
 	noisy-bg()
 	width 250px
 	padding 0 20px
-	box-shadow 0 5px 3px rgba(0,0,0,0.2)
-	border-right 1px solid #ccc
+	box-shadow inset -3px 0 5px rgba(0,0,0,0.1)
+	border-right 1px solid #aaa
 
 .map-container
 	height 100%
@@ -96,3 +124,4 @@ noisy-bg()
 	display table
 	& > *
 		display table-cell
+
