@@ -19,6 +19,15 @@ if (Meteor.isServer) {
 				signed_query.digest = crypto.createHmac("sha1", new Buffer(apikey, "base64").toString("binary")).update(check).digest('base64');
 
 				return signed_query;
+			},
+		
+			getSchools: function() {
+				
+				schoolRequest = Meteor.http.call("GET","https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A",{auth: "nick.scott@import.io:Neyfer!113"})
+				
+				return schoolRequest.data.results;
+
+				//SchoolData
 			}
 		});
 	});

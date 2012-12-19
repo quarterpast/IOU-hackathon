@@ -1,14 +1,5 @@
 if (Meteor.isClient) {
-	function cacheSchools() {
-		
-		Meteor.http.get("https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A", function(err, results) {
-			console.log(results);
-			
-		});
-		
-		//SchoolData
-		
-	}
+	
 	
 	
 	function pinSchool(latLng, clickCallback) {
