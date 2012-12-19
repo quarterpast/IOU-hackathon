@@ -42,15 +42,6 @@ function getJobDaytr(jobSearchTerm, gotDaytr) {
 	});
 }
 
-function geocodeAddress(addressString, callback) {
-	//convert the result to a latlng instead of the horrible crap that google sends back
-	geocodr.geocode({address: addressString}, function(results, status) {
-		console.log(status);
-		if(status == google.maps.GeocoderStatus.OK)
-			callback(results[0].geometry.location);
-	});
-}
-
 var heatmap, searchquery;
 
 Session.set('searchicon','<i class="icon-search"></i>');
