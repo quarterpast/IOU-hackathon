@@ -1,3 +1,49 @@
+@import('nib')
+@import "//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css"
+@import "//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css"
+@import "fonts"
+
+
+html
+	height: 100%
+body
+	height: 100%
+	margin: 0
+	padding: 0
+
+body
+	font-family "Roboto Light"
+	font-size 16px
+	line-height 24px
+p
+	margin 0 0 1.2em
+
+h1, h2, h3, h4, h5, h6
+	font-family "Roboto Thin"
+	em
+		font-family "Roboto Thin Italic"
+
+	font-weight 300
+	margin 1rem 0 0.5rem
+
+em
+	font-family "Roboto Light Italic"
+
+strong
+	font-family "Roboto Medium"
+
+strong em
+em strong
+	font-family "Roboto Medium Italic"
+
+a
+	text-decoration none
+	font-family "Roboto Regular"
+	color #09C
+	&:hover, &:active
+		color #3BF
+		border-bottom 1px dotted #3BF
+
 calc()
 	if current-property
 		for prefix in vendors
@@ -7,7 +53,13 @@ calc()
 	else
 		error('calc() must be used within a property')
 
+noisy-bg()
+	background-image url("/noisebg.png")
+	background-size 50px 50px
+	background-repeat repeat
+
 .navbar.not-fixed
+	noisy-bg()
 	.brand
 		margin 0
 		padding 0
@@ -21,14 +73,26 @@ calc()
 	&.navbar-fixed-top
 		position static
 
-.container-fluid.full-height
-	height calc('100% - 49px')
+.full-height
 	padding 0
-html
-	height: 100%
-body
-	height: 100%
-	margin: 0
-	padding: 0
+	height 100%
+	&.container-fluid
+		height calc('100% - 49px')
+
 #map_canvas
 	height: 100%
+
+.sidebar
+	noisy-bg()
+	width 250px
+	padding 0 20px
+	box-shadow 0 5px 3px rgba(0,0,0,0.2)
+	border-right 1px solid #ccc
+
+.map-container
+	height 100%
+	width 100%
+
+	display table
+	& > *
+		display table-cell
