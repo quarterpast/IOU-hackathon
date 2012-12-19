@@ -135,8 +135,9 @@ if (Meteor.isClient) {
 			engineeringJobs = allResults;
 			
 			_.each(_.pluck(engineeringJobs,"employment_tenure/person/places_lived/location/topic:name"),function(locationString) {
-				console.log(locationString)
 				if(geo = GeocodeResults.findOne({loc:locationString})) {
+					console.log("mongo cache hit %s",locationString);
+					console.log(geo.latLng);
 					jobMapData.push(geo.latLng);
 				} else geocodeAddress(locationString,function(latLng) {
 					GeocodeResults.insert({loc:locationString,latLng:latLng});
