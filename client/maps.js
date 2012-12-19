@@ -4,6 +4,17 @@ if (Meteor.isClient) {
 	var io;
 	var map;
 	
+	function cacheSchools() {
+		
+		Meteor.http.get("https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A", function(err, results) {
+			console.log(results);
+			
+		});
+		
+		//SchoolData
+		
+	}
+	
 	function getJobDaytr(jobSearchTerm, gotDaytr)
 	{
 		completeResults = [];
@@ -134,11 +145,12 @@ if (Meteor.isClient) {
 		getJobDaytr("Engineering", function(allResults) {
 			engineeringJobs = allResults;
 			
+			//get the geolocation cache or use google geocode stuff
 			_.each(_.pluck(engineeringJobs,"employment_tenure/person/places_lived/location/topic:name"),function(locationString) {
 				if(geo = GeocodeResults.findOne({loc:locationString})) {
 					console.log("mongo cache hit %s",locationString);
 					console.log(geo.latLng);
-					jobMapData.push(geo.latLng);
+					jobMapData.push(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za));
 				} else geocodeAddress(locationString,function(latLng) {
 					GeocodeResults.insert({loc:locationString,latLng:latLng});
 					jobMapData.push(latLng);
