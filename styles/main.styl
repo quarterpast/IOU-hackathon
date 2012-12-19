@@ -1,3 +1,49 @@
+@import('nib')
+@import "//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css"
+@import "//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css"
+@import "fonts"
+
+
+html
+	height: 100%
+body
+	height: 100%
+	margin: 0
+	padding: 0
+
+*
+	font-family "Roboto Light"
+	font-size 16px
+	line-height 24px
+p
+	margin 0 0 1.2em
+
+h1, h2, h3, h4, h5, h6
+	font-family "Roboto Thin"
+	em
+		font-family "Roboto Thin Italic"
+
+	font-weight 300
+	margin 1rem 0 0.5rem
+
+em
+	font-family "Roboto Light Italic"
+
+strong
+	font-family "Roboto Medium"
+
+strong em
+em strong
+	font-family "Roboto Medium Italic"
+
+a
+	text-decoration none
+	font-family "Roboto Regular"
+	color #09C
+	&:hover, &:active
+		color #3BF
+		border-bottom 1px dotted #3BF
+
 calc()
 	if current-property
 		for prefix in vendors
@@ -7,28 +53,75 @@ calc()
 	else
 		error('calc() must be used within a property')
 
-.navbar
+noisy-bg()
+	background-image url("/noisebg.png")
+	background-size 50px 50px
+	background-repeat repeat
+
+.navbar.not-fixed
+	noisy-bg()
 	.brand
 		margin 0
 		padding 0
+		&:hover
+			border 0 none
+		img
+			width 285px
+			height 60px
+
+	.navbar-inner
+		border-bottom-color #aaa
 
 	.navbar-form
-		line-height 48px
+		line-height 60px
 		margin-right 10px
 		input, button
 			margin 0
+		.search-query
+			height 28px
+			border-radius 18px
+			font-size 18px
+
+		.input-append
+			margin 0
+			.search-query
+				border-radius right 0
+			.btn.add-on
+				i
+					font-size 19px
+					line-height 1em
+				box-sizing content-box
+				margin-left -1px
+				height 28px
+				width 28px
+				border-radius right 18px
+				border-color #0044cc #0044cc #002a80
+				text-shadow 0 -1px 0 #001230
 
 	&.navbar-fixed-top
 		position static
 
-.container-fluid
-	height calc('100% - 49px')
+.full-height
 	padding 0
-html
-	height: 100%
-body
-	height: 100%
-	margin: 0
-	padding: 0
+	height 100%
+	&.container-fluid
+		height calc('100% - 60px - 1px')
+
 #map_canvas
 	height: 100%
+
+.sidebar
+	noisy-bg()
+	width 250px
+	padding 0 20px
+	box-shadow inset -3px 0 5px rgba(0,0,0,0.1)
+	border-right 1px solid #aaa
+
+.map-container
+	height 100%
+	width 100%
+
+	display table
+	& > *
+		display table-cell
+

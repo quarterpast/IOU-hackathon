@@ -12,25 +12,13 @@
 	<!-- import•io js client library -->
 	<script type="text/javascript" src="//d7xe6yl2ckrgs.cloudfront.net/js/0.2-matt-testing/importio.js"></script>
 
-	<link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
-
 	<!-- local javascript shite -->
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyDSs7FSlpD-LXM3YEHZCRBWP-f-NE9VJH8&amp;sensor=false"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&amp;key=AIzaSyDSs7FSlpD-LXM3YEHZCRBWP-f-NE9VJH8&amp;sensor=false"></script>
 </head>
 
 <body>
-	<header class="navbar navbar-fixed-top">
-		<nav class="navbar-inner">
-			<a class="brand" href="#">
-				<img src="/logo-dark.png" alt="Relocatr" height="48" width="228">
-			</a>
-			<form class="navbar-form pull-right form-search">
-				<input type="text" class="input-medium search-query" placeholder="Search for jobs&hellip;">
-				<button class="btn"><i class="icon-search"></i></button>
-			</form>
-		</nav>
-	</header>
-	<div class="container-fluid">
+	{{> header}}
+	<div class="container-fluid full-height">
 		{{> map}}
 	</div>
 </body>
