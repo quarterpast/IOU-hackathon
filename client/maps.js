@@ -49,16 +49,13 @@ if (Meteor.isClient) {
 		});
 	}
 	
-	function geocodeAddress(addressString, callback)
-	{
+	function geocodeAddress(addressString, callback) {
 		//convert the result to a latlng instead of the horrible crap that google sends back
-//		geocodr.geocode( {address: addressString}, function(results, status)
-//				{
-//					console.log(status);
-//					if(status == google.maps.GeocoderStatus.OK)
-//						callback(results[0].geometry.location);
-//				});
-		
+		geocodr.geocode({address: addressString}, function(results, status) {
+			console.log(status);
+			if(status == google.maps.GeocoderStatus.OK)
+				callback(results[0].geometry.location);
+		});
 	}
 	
 	function pinSchool(latLng, clickCallback) {
@@ -87,70 +84,74 @@ if (Meteor.isClient) {
 		var greenwich = new google.maps.LatLng(51.46,0.2);
 		
 		var mapOptions = {
-			    center: greenwich,
-			    zoom: 8,
-			    mapTypeId: google.maps.MapTypeId.ROADMAP
-			  };
+					center: greenwich,
+					zoom: 8,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
 		
-		geocodr = new google.maps.Geocoder;
+		geocodr = new google.maps.Geocoder();
 		
 		//start up import.io link
 		io = new importio(function(){});
 		
 		map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 		
-		 var blobbyness = [
-			  new google.maps.LatLng(51.46,0.0),
-			  new google.maps.LatLng(51.36,-0.1),
-			  new google.maps.LatLng(51.56,-0.2),
-			  new google.maps.LatLng(51.66,-0.2),
-			  new google.maps.LatLng(51.56,-0.0),
-			  new google.maps.LatLng(51.46,-0.3),
-			  new google.maps.LatLng(51.56,-0.4),
-			  new google.maps.LatLng(52.66,0.2),
-			  new google.maps.LatLng(52.66,0.4),
-			  new google.maps.LatLng(52.66,0.2),
-			  new google.maps.LatLng(52.26,0.4),
-			  new google.maps.LatLng(52.36,0.4),
-			  new google.maps.LatLng(52.46,0.4),
-			  new google.maps.LatLng(51.56,-0.5),
-			  new google.maps.LatLng(52.44,-1.9),
-			  new google.maps.LatLng(52.46,-2.2),
-			  new google.maps.LatLng(52.45,-2.3),
-			  new google.maps.LatLng(52.44,-1.9),
-			  new google.maps.LatLng(52.46,-2.1)
-		  ];
-		  		  
-		  var location = "Norwich";
-		  geocodeAddress(location, function(latLng) {
-			  console.log(location, latLng);
-			  
-			  pinLocation(latLng, function() {
-				  //Hi brennan, look at google.maps.InfoWindow here for displaying data.... http://www.evoluted.net/thinktank/web-development/google-maps-api-v3-custom-location-pins
-				  alert("you clicked the box, biatch");
-			  });
-		  });
-		  
-		  var engineeringJobs;
-		  var jobMapData = [];
-		  
-		  getJobDaytr("Engineering", function(allResults) {
-			  engineeringJobs = allResults;
-			  
-			  _.each(_.pluck(engineeringJobs,"employment_tenure/person/places_lived/location/topic:name"),function(locationString) {
-				  geocodeAddress(locationString,function(latLng) {
-					  jobMapData.push(latLng);
-				  });
-			  });
+		var blobbyness = [
+			new google.maps.LatLng(51.46,0.0),
+			new google.maps.LatLng(51.36,-0.1),
+			new google.maps.LatLng(51.56,-0.2),
+			new google.maps.LatLng(51.66,-0.2),
+			new google.maps.LatLng(51.56,-0.0),
+			new google.maps.LatLng(51.46,-0.3),
+			new google.maps.LatLng(51.56,-0.4),
+			new google.maps.LatLng(52.66,0.2),
+			new google.maps.LatLng(52.66,0.4),
+			new google.maps.LatLng(52.66,0.2),
+			new google.maps.LatLng(52.26,0.4),
+			new google.maps.LatLng(52.36,0.4),
+			new google.maps.LatLng(52.46,0.4),
+			new google.maps.LatLng(51.56,-0.5),
+			new google.maps.LatLng(52.44,-1.9),
+			new google.maps.LatLng(52.46,-2.2),
+			new google.maps.LatLng(52.45,-2.3),
+			new google.maps.LatLng(52.44,-1.9),
+			new google.maps.LatLng(52.46,-2.1)
+		];
+					
+		var location = "Norwich";
+		geocodeAddress(location, function(latLng) {
+			console.log(location, latLng);
+			
+			pinLocation(latLng, function() {
+				//Hi brennan, look at google.maps.InfoWindow here for displaying data.... http://www.evoluted.net/thinktank/web-development/google-maps-api-v3-custom-location-pins
+				alert("you clicked the box, biatch");
+			});
+		});
+		
+		var engineeringJobs;
+		var jobMapData = [];
+		
+		getJobDaytr("Engineering", function(allResults) {
+			engineeringJobs = allResults;
+			
+			_.each(_.pluck(engineeringJobs,"employment_tenure/person/places_lived/location/topic:name"),function(locationString) {
+				console.log(locationString)
+				if(geo = GeocodeResults.findOne({loc:locationString})) {
+					jobMapData.push(geo.latLng);
+				} else geocodeAddress(locationString,function(latLng) {
+					GeocodeResults.insert({loc:locationString,latLng:latLng});
+					jobMapData.push(latLng);
+				});
+			});
 
-		  });
-		 
-		  
-		  var heatmap = new google.maps.visualization.HeatmapLayer({
-		  	  data: blobbyness,
-		  	  radius: 50
-		  });
-		  
-		  heatmap.setMap(map);
+		});
+		
+		
+		var heatmap = new google.maps.visualization.HeatmapLayer({
+				data: blobbyness,
+				radius: 50
+		});
+		
+		heatmap.setMap(map);
 	}
 }

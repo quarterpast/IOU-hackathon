@@ -1,0 +1,1 @@
+GeocodeResults = new Meteor.Collection('geocode');
