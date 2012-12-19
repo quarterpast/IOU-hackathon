@@ -57,11 +57,6 @@ if (Meteor.isClient) {
 				//Hi brennan, look at google.maps.InfoWindow here for displaying data.... http://www.evoluted.net/thinktank/web-development/google-maps-api-v3-custom-location-pins
 				alert("you clicked the box, biatch");
 			});
-		});
-		
-		var engineeringJobs;
-		var jobMapData = [];
-		
-	
-	}
+		});	
+	};
 }
