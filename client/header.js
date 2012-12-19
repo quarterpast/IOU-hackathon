@@ -1,42 +1,62 @@
+var queries = {};
+
 function getJobDaytr(jobSearchTerm, gotDaytr) {
-	completeResults = [];
-	
+	var completeResults = [];
 	Meteor.call('signQuery',{
 		requestId: 'request-'+Date.now()+'-'+jobSearchTerm,
 		connectorGuids: _.chain(connectrs).values().reject(_.isEmpty).value(),
 		input: {'job_title/topic:description': jobSearchTerm},
 		maxPages: 100
 	},function(err,signedQuery) {
-		if(err) return console.error(err);
+		if(err) return gotDaytr(err);
 		console.log(signedQuery);
 		//track the progress of the query
-		jobsSpawned = 0;
-		jobsStarted = 0;
-		jobsCompleted = 0;
-		
+		if(!(requestId in queries)) {
+			queries[requestId] = {
+				jobsSpawned: 0,
+				jobsStarted: 0,
+				jobsCompleted: 0,
+				finished: false
+			}
+		}
+
 		io.query(signedQuery,function(message){
 			console.log(message);
-			switch(message.data.type)
-			{
+			switch(message.data.type) {
 			case 'SPAWN':
-				jobsSpawned++;
+				queries[requestId].jobsSpawned++;
 				break;
 			case 'INIT':
 			case 'START':
-				jobsStarted++;
+				queries[requestId].jobsStarted++;
 				break;
 
 			case 'STOP':
-				jobsCompleted++;
+				queries[requestId].jobsCompleted++;
+				break;
+			case 'ERROR':
+				queries[requestId].finished = true;
+				queries[requestId].error = message.data.data;
 				break;
 			case 'MESSAGE':
-				completeResults = completeResults.concat(message.data.data.results);
+				if('error' in message.data.data) {
+					queries[requestId].finished = true;
+					queries[requestId].error = message.data.data;
+				} else {
+					completeResults = completeResults.concat(message.data.data.results);
+				}
 				//do something with this: message.data.data.results
 			}
 			
-			finished = jobsStarted == jobsCompleted && jobsSpawned == jobsStarted -1 && jobsStarted > 0;
+			queries[requestId].finished =
+				queries[requestId].jobsStarted == queries[requestId].jobsCompleted
+				&& queries[requestId].jobsSpawned == queries[requestId].jobsStarted -1
+				&& queries[requestId].jobsStarted > 0;
 			//if we have all the returned data then call this callback to tell 
-			if(finished) gotDaytr(completeResults);
+			if(queries[requestId].finished) {
+				gotDaytr(queries[requestId].error,completeResults);
+				delete queries[requestId];
+			}
 			
 		});
 	});
@@ -61,7 +81,7 @@ Template.header.events({
 		Session.set('searchicon','<img src="/load.gif">')
 
 		if(heatmap != null) heatmap.setMap(null);
-		getJobDaytr(searchquery, function(allResults) {
+		getJobDaytr(searchquery, function(err,allResults) {
 			var jobMapData = []
 			_.chain(allResults)
 			.pluck("employment_tenure/person/places_lived/location/topic:name")
@@ -70,7 +90,8 @@ Template.header.events({
 					console.log("mongo cache hit %s",locationString);
 					console.log(geo.latLng);
 					jobMapData.push(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za));
-				} else geocodeAddress(locationString,function(latLng) {
+				} else geocodeAddress(locationString,function(err,latLng) {
+					if(err) return;
 					GeocodeResults.insert({loc:locationString,latLng:latLng});
 					jobMapData.push(latLng);
 				});
