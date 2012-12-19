@@ -144,15 +144,19 @@ if (Meteor.isClient) {
 					jobMapData.push(latLng);
 				});
 			});
+			
+			var heatmap = new google.maps.visualization.HeatmapLayer({
+				data: jobMapData,
+				radius: 50
+			});
+			
+			heatmap.setMap(map);
 
 		});
 		
 		
-		var heatmap = new google.maps.visualization.HeatmapLayer({
-				data: jobMapData,
-				radius: 50
-		});
 		
-		heatmap.setMap(map);
+		
+		
 	}
 }
