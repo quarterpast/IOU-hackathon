@@ -148,7 +148,7 @@ if (Meteor.isClient) {
 		
 		
 		var heatmap = new google.maps.visualization.HeatmapLayer({
-				data: blobbyness,
+				data: jobMapData,
 				radius: 50
 		});
 		
