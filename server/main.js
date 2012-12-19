@@ -23,7 +23,7 @@ if (Meteor.isServer) {
 		
 			getSchools: function() {
 				
-				schoolRequest = Meteor.http.call("GET","https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A",{auth: "nick.scott@import.io:Neyfer!113"})
+				schoolRequest = Meteor.http.call("GET","https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A",{auth: "nick.scott@import.io:Neyfer!113"});
 				
 				SchoolData.remove({});
 				_.each(schoolRequest.data.results,function(result) {
@@ -33,15 +33,12 @@ if (Meteor.isServer) {
 					}
 					else {
 						geocodeAddress(result.location.address, function(err,latLng) {
-							if(err) console.log(err)
+							if(err) console.log(err);
 							else console.log("inserting school " + result.location.address + " geocode: " + latLng);
 						});
 						//SchoolData.insert({title: result.title, latLng: geocodeAddress(result.location.address) });
-						
-						
 					}
-						
-				})
+				});
 
 				//SchoolData
 			}
