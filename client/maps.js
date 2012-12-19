@@ -2,9 +2,9 @@ if (Meteor.isClient) {
 	
 	
 	
-	function pinSchool(latLng, clickCallback) {
+	function pinSchool(schoolAddress, clickCallback) {
 		var pinImage = google.maps.MarkerImage('/schoolIcon.png',new google.maps.Size(16,16), new google.maps.Point(0,0), new google.maps.Point(16,16));
-		var addedPin = new google.maps.Marker({position: latLng,map: map, icon: pinImage});
+		var addedPin = new google.maps.Marker({position: schoolAddress,map: map, icon: pinImage});
 		google.maps.event.addListener(addedPin, 'click', clickCallback);
 	}
 	
@@ -34,6 +34,10 @@ if (Meteor.isClient) {
 				};
 		
 		geocodr = new google.maps.Geocoder();
+		
+		Meteor.call('getSchools',function(schools) {
+			console.log(schools);
+		});
 		
 		//start up import.io link
 		io = new importio(function(){});
