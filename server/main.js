@@ -18,7 +18,6 @@ if (Meteor.isServer) {
 
 				signed_query.digest = crypto.createHmac("sha1", new Buffer(apikey, "base64").toString("binary")).update(check).digest('base64');
 
-
 				return signed_query;
 			}
 		});
