@@ -1,4 +1,5 @@
 <head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<title>test</title>
 	<!-- import•io js client library deps -->
 	<script type="text/javascript" src="//d7xe6yl2ckrgs.cloudfront.net/js/0.2-matt-testing/cometd.js"></script>
@@ -10,7 +11,11 @@
 	<script type="text/javascript" src="//d7xe6yl2ckrgs.cloudfront.net/js/0.2-matt-testing/jquery.cometd-ack.js"></script>
 	<!-- import•io js client library -->
 	<script type="text/javascript" src="//d7xe6yl2ckrgs.cloudfront.net/js/0.2-matt-testing/importio.js"></script>
+
 	<link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
+
+	<!-- local javascript shite -->
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyDSs7FSlpD-LXM3YEHZCRBWP-f-NE9VJH8&amp;sensor=false"></script>
 </head>
 
 <body>
@@ -26,6 +31,6 @@
 		</nav>
 	</header>
 	<div class="container-fluid">
-		{{> main}}
+		{{> map}}
 	</div>
 </body>
