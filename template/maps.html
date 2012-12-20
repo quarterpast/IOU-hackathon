@@ -1,7 +1,9 @@
 <template name="map">
 	<div class="map-container">
 		{{> sidebar}}
+		{{#constant}}
 		<div id="map_canvas" class="map-panel"></div>
+		{{/constant}}
 		{{#each locationSidebar}}
 			{{> locationSidebar}}
 		{{/each}}
