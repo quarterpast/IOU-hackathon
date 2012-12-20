@@ -11,7 +11,11 @@ Template.sidebar.factors = [
 	{name:"Wellbeing"}
 ];
 
-Session.set('locations',[])
+var locations = [
+	{name:"London"},
+	{name:"Nottingham"}
+];
+Session.set('locations',[]);
 
 Template.sidebar.events({
 	"click [href='#toggle']": function(ev) {
@@ -32,9 +36,17 @@ Template.sidebar.events({
 				alert("Hospitals is "+(ev.target.checked ? "enabled" : "disabled"));
 				break;
 		}
+	},
+	"click .btn-pin": function(ev) {
+		ev.preventDefault();
+		Session.set('locations',
+			Session.get('locations').concat(locations.shift())
+		);
 	}
 });
 
 Template.sidebar.rendered = function() {
 	$('.subs').hide();
 };
+
+
