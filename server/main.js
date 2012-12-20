@@ -23,27 +23,32 @@ if (Meteor.isServer) {
 		
 			getSchools: function() {
 				
-				schoolRequest = Meteor.http.call("GET","https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=A",{auth: "nick.scott@import.io:Neyfer!113"})
-				
-				SchoolData.remove({});
-				_.each(schoolRequest.data.results,function(result) {
-					if(SchoolData.findOne({title: result.title})) {
-						//do nothing here
-						console.log("found in cache " + result);
-					}
-					else {
-						geocodeAddress(result.location.address, function(err,latLng) {
-							if(err) console.log(err)
-							else console.log("inserting school " + result.location.address + " geocode: " + latLng);
-						});
-						//SchoolData.insert({title: result.title, latLng: geocodeAddress(result.location.address) });
-						
-						
-					}
-						
-				})
+				var str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-				//SchoolData
+				for(var i=0; i<str.length; i++)
+				{
+					var nextChar = str.charAt(i);
+					schoolRequest = Meteor.http.call("GET","https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q="+nextChar,{auth: "nick.scott@import.io:Neyfer!113"})
+					
+					SchoolData.remove({});
+					_.each(schoolRequest.data.results,function(result) {
+						
+						if(SchoolData.findOne({title: result.title})) {
+							//do nothing here
+							console.log("found in cache " + result);
+						}
+						else {
+							geocodeAddress(result.location.address, function(err,latLng) {
+								if(err) console.log(err)
+								else console.log("inserting school " + result.location.address + " geocode: " + latLng);
+								
+								SchoolData.insert({title: result.title, latLng: geocodeAddress(result.location.address) });
+							});
+						}
+							
+					});
+					
+				}
 			}
 		});
 	});
