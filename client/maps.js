@@ -1,6 +1,39 @@
 if(Meteor.isClient) {
+	
+	
+	schoolMarkers = [];
+	hospitalMarkers = [];
 
 	var cachecount = 0;
+	
+	function gotHospitalDaytr(err,allResults) {
+		//connector guid hospitals 20621576-8982-4001-af32-ec1bdd47797c
+		//connector guid dentists 9dd56e47-9236-4e40-af25-2db3879c054f
+		
+		var hospMapData = [];
+		
+		console.log(allResults);
+		_.each(allResults,function(singleresult) {
+			console.log("hospital result: "+singleresult);
+			console.log(singleresult);
+			var locationString = singleresult["location/street_address/postal_code/postal_code"];
+			console.log(locationString);
+			var hospitalScore = singleresult["location/topic:description"];
+			var hospitalName = singleresult["location/topic:name"];
+
+			if(geo = GeocodeResults.findOne({loc:locationString})) {
+				console.log("mongo cache hit %s",locationString);
+				console.log(geo.latLng);
+
+				hospitalMarkers.push(pinHospital(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za), hospitalName));
+			} else geocodeAddress(locationString,function(err,latLng) {
+				if(err) return console.log(err);
+				GeocodeResults.insert({loc:locationString,latLng:latLng});
+
+				hospitalMarkers.push(pinHospital(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za), hospitalName));
+			});
+		});
+	}
 
 	function getSchools(callback) {
 		_.each("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(''), function(nextChar) {
@@ -17,14 +50,17 @@ if(Meteor.isClient) {
 
 				_.each(schoolRequest.data.results, function(result) {
 					if(result.location.address.toLowerCase().indexOf("london") >= 0 || result.location.address.toLowerCase().indexOf("nottingham") >= 0) {
-
+						
+						sch = SchoolData.findOne({"title": result.title});
 						//console.log("looking for cache result", result.title);
-						if(SchoolData.findOne({
-							"title": result.title
-						}) !== null) {
+						if(typeof sch !== "undefined") {
 							//do nothing here
 							console.log("found in cache " + result.title);
 							cachecount++;
+							
+							schoolMarkers.push(pinSchool(new google.maps.LatLng(sch.latLng.Ya,sch.latLng.Za), result.title , function() {
+								
+							}));
 						} else {
 							geocodeAddress(_.last(result.location.address.split(',')), function(err, latLng) {
 								if(err) {
@@ -45,33 +81,77 @@ if(Meteor.isClient) {
 			});
 		});
 	}
+	
+	function showHospitalMarkers()
+	{
+		_.each(hospitalMarkers, function(marker) {
+			marker.setVisible(true);
+		});
+	}
+	
+	function hideHospitalMarkers()
+	{
+		_.each(hospitalMarkers, function(marker) {
+			marker.setVisible(false);
+		});
+	}
+	
+	function showSchoolMarkers()
+	{
+		_.each(schoolMarkers, function(marker) {
+			marker.setVisible(true);
+		});
+	}
+	
+	function hideSchoolMarkers()
+	{
+		_.each(schoolMarkers, function(marker) {
+			marker.setVisible(false);
+		});
+	}
 
-	function pinSchool(schoolAddress, clickCallback) {
-		var pinImage = google.maps.MarkerImage('/schoolIcon.png', new google.maps.Size(16, 16), new google.maps.Point(0, 0), new google.maps.Point(16, 16));
+	function pinSchool(latLng,name, clickCallback) {
+		var img = 'favicon.ico';
 		var addedPin = new google.maps.Marker({
-			position: schoolAddress,
+			position: latLng,
 			map: map,
-			icon: pinImage
+			title: name,
+			icon: img
 		});
 		google.maps.event.addListener(addedPin, 'click', clickCallback);
+		return addedPin;
 	}
 
 	function pinJob(latLng, clickCallback) {
-		var pinImage = google.maps.MarkerImage('/jobIcon.png', new google.maps.Size(16, 16), new google.maps.Point(0, 0), new google.maps.Point(16, 16));
+		var img = 'jobIcon.png';
 		var addedPin = new google.maps.Marker({
 			position: latLng,
 			map: map,
-			icon: pinImage
+			icon: img
 		});
 		google.maps.event.addListener(addedPin, 'click', clickCallback);
 	}
-
-	function pinLocation(latLng, clickCallback) {
-		var pinImage = google.maps.MarkerImage('/favicon.png', new google.maps.Size(16, 16), new google.maps.Point(0, 0), new google.maps.Point(16, 16));
+	
+	function pinHospital(latLng, name) {
+		var img = 'favicon.ico';
 		var addedPin = new google.maps.Marker({
 			position: latLng,
 			map: map,
-			icon: pinImage
+			title: name,
+			icon: img
+		});
+		google.maps.event.addListener(addedPin, 'click', function() {
+			console.log("pinned");
+		});
+		return addedPin;
+	}
+
+	function pinLocation(latLng, clickCallback) {
+		var img = 'favicon.png';
+		var addedPin = new google.maps.Marker({
+			position: latLng,
+			map: map,
+			icon: img
 		});
 		google.maps.event.addListener(addedPin, 'click', clickCallback);
 	}
@@ -90,8 +170,15 @@ if(Meteor.isClient) {
 		};
 
 		geocodr = new google.maps.Geocoder();
+		
+		//getSchools();
 
-		getSchools();
+		getHospDaytr("Nottingham", gotHospitalDaytr);
+		
+		getHospDaytr("London", gotHospitalDaytr);
+
+		
+		
 
 		//		Meteor.call('getSchools',function(err, schools) {
 		//			console.log(schools);

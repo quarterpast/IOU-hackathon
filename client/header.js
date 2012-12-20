@@ -1,11 +1,79 @@
 var queries = {};
 
+function getHospDaytr(hospSearchTerm, gotDaytr) {
+	var completeResults = [];
+	var requestId =  'request-'+Date.now()+'-'+hospSearchTerm
+	Meteor.call('signQuery',{
+		requestId: requestId,
+		connectorGuids: _.chain(hospconnectrs).values().reject(_.isEmpty).value(),
+		input: {'location/topic:name': hospSearchTerm},
+		maxPages: 2
+	},function(err,signedQuery) {
+		if(err) return gotDaytr(err);
+		console.log(signedQuery);
+		//track the progress of the query
+		if(!(requestId in queries)) {
+			queries[requestId] = {
+				jobsSpawned: 0,
+				jobsStarted: 0,
+				jobsCompleted: 0,
+				finished: false
+			};
+		}
+
+		io.query(signedQuery,function(message){
+			console.log(message);
+			switch(message.data.type) {
+			case 'SPAWN':
+				queries[requestId].jobsSpawned++;
+				break;
+			case 'INIT':
+			case 'START':
+				queries[requestId].jobsStarted++;
+				break;
+
+			case 'STOP':
+				queries[requestId].jobsCompleted++;
+				break;
+			case 'ERROR':
+				queries[requestId].finished = true;
+				queries[requestId].error = message.data.data;
+				break;
+			case 'MESSAGE':
+				if('error' in message.data.data) {
+					queries[requestId].finished = true;
+					queries[requestId].error = message.data.data;
+				} else {
+					completeResults = completeResults.concat(message.data.data.results);
+					
+				}
+				gotDaytr(queries[requestId].error,message.data.data.results);
+				
+				break;
+				//do something with this: message.data.data.results
+			}
+			
+			queries[requestId].finished =
+				queries[requestId].jobsStarted == queries[requestId].jobsCompleted
+				&& queries[requestId].jobsSpawned == queries[requestId].jobsStarted -1
+				&& queries[requestId].jobsStarted > 0;
+			//if we have all the returned data then call this callback to tell 
+			if(queries[requestId].finished) {
+				console.log("hospital queries finished");
+				gotDaytr(queries[requestId].error,completeResults);
+				delete queries[requestId];
+			}
+			
+		});
+	});
+}
+
 function getJobDaytr(jobSearchTerm, gotDaytr) {
 	var completeResults = [];
 	var requestId =  'request-'+Date.now()+'-'+jobSearchTerm
 	Meteor.call('signQuery',{
 		requestId: requestId,
-		connectorGuids: _.chain(connectrs).values().reject(_.isEmpty).value(),
+		connectorGuids: _.chain(jobconnectrs).values().reject(_.isEmpty).value(),
 		input: {'job_title/topic:description': jobSearchTerm},
 		maxPages: 100
 	},function(err,signedQuery) {
