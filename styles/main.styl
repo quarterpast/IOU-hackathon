@@ -18,16 +18,22 @@ body
 p
 	margin 0 0 1.2em
 
-h1, h2, h3, h4, h5, h6
+h1, h2, h3
 	font-family "Roboto Thin"
 	em
-		font-size inherit
 		font-family "Roboto Thin Italic"
-	strong
+h4, h5, h6
+	font-family "Roboto Light"
+	em
+		font-family "Roboto Light Italic"
+
+h1, h2, h3, h4, h5, h6
+	em, strong
 		font-size inherit
+	strong
 		font-family "Roboto Medium"
 
-	font-weight 300
+	font-weight 500
 	margin 1rem 0 0.5rem
 
 em
@@ -92,6 +98,12 @@ noisy-bg()
 				width 38px
 				border-radius right 28px
 
+.toggler
+	font-size inherit
+	&:hover
+		border 0 none
+		text-decoration none
+
 .navbar.not-fixed
 	noisy-bg()
 	.brand
@@ -147,11 +159,13 @@ noisy-bg()
 	height: 100%
 
 .sidebar
+	height calc('100% - 60px - 1px')
 	noisy-bg()
 	width 250px
 	padding 0 20px
 	box-shadow inset -3px 0 5px rgba(0,0,0,0.1)
 	border-right 1px solid #aaa
+	overflow auto
 
 .map-container
 	height 100%

@@ -1,5 +1,17 @@
 <template name="sidebar">
 	<aside class="sidebar full-height">
-		<h2>hello</h2>
+		{{#each factors}}
+			<div class="sidebar-section">
+				<h2>
+					{{name}}
+					{{#if sub}}
+						<a href="#toggle" class="toggler pull-right"><i class="icon-large icon-caret-right"></i></a>
+					{{/if}}
+				</h2>
+				<div class="subs">
+					{{#each sub}}<h4>{{.}}</h4>{{/each}}
+				</div>
+			</div>
+		{{/each}}
 	</aside>
 </template>
