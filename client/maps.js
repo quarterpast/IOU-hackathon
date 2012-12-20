@@ -1,5 +1,63 @@
 if (Meteor.isClient) {
 	
+	var cachecount = 0;
+	
+	function getSchools(callback)
+	{
+		var str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		for(var i=0; i<str.length; i++)
+		{
+			var nextChar = str.charAt(i);
+			Meteor.http.get("https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q="+nextChar,{headers: {"Authorization":"Basic bmljay5zY290dEBpbXBvcnQuaW86TmV5ZmVyITExMw=="}}, function(err, schoolRequest)
+					{
+						if(err)
+						{
+							console.log("error");
+							return;
+						}
+						console.log(schoolRequest);
+			
+						_.each(schoolRequest.data.results,function(result) {
+							Meteor.setTimeout(function() {
+								if(result.location.address.toLowerCase().indexOf("london") >= 0 || result.location.address.toLowerCase().indexOf("nottingham") >= 0 )
+								{
+									
+									//console.log("looking for cache result", result.title);
+									
+									if(SchoolData.findOne({"title":result.title})!=null) {
+										//do nothing here
+										console.log("found in cache " + result.title);
+										cachecount++;
+									}
+									else {
+										geocodeAddress(_.last(result.location.address.split(',')), function(err,latLng) {
+											if(err) 
+											{
+												console.log(err);
+												return;
+											}
+											else 
+											{
+												console.log(cachecount);
+												console.log("inserting school " + result.location.address + " geocode: " + latLng);
+												SchoolData.insert({title:result.title,latLng:latLng});
+											}
+											
+											
+											
+										});
+									}
+								}
+							});
+						}
+							
+							
+						});
+					});
+			
+		}
+	}
 	
 	
 	function pinSchool(schoolAddress, clickCallback) {
@@ -35,9 +93,11 @@ if (Meteor.isClient) {
 		
 		geocodr = new google.maps.Geocoder();
 		
-		Meteor.call('getSchools',function(schools) {
-			console.log(schools);
-		});
+		getSchools();
+		
+//		Meteor.call('getSchools',function(err, schools) {
+//			console.log(schools);
+//		});
 		
 		//start up import.io link
 		io = new importio(function(){});
@@ -46,8 +106,7 @@ if (Meteor.isClient) {
 
 		var location = "Norwich";
 		geocodeAddress(location, function(latLng) {
-			console.log(location, latLng);
-			
+
 			pinLocation(latLng, function() {
 				//Hi brennan, look at google.maps.InfoWindow here for displaying data.... http://www.evoluted.net/thinktank/web-development/google-maps-api-v3-custom-location-pins
 				alert("you clicked the box, biatch");
