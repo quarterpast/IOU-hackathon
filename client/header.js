@@ -2,8 +2,9 @@ var queries = {};
 
 function getJobDaytr(jobSearchTerm, gotDaytr) {
 	var completeResults = [];
+	var requestId =  'request-'+Date.now()+'-'+jobSearchTerm
 	Meteor.call('signQuery',{
-		requestId: 'request-'+Date.now()+'-'+jobSearchTerm,
+		requestId: requestId,
 		connectorGuids: _.chain(connectrs).values().reject(_.isEmpty).value(),
 		input: {'job_title/topic:description': jobSearchTerm},
 		maxPages: 100
@@ -17,7 +18,7 @@ function getJobDaytr(jobSearchTerm, gotDaytr) {
 				jobsStarted: 0,
 				jobsCompleted: 0,
 				finished: false
-			}
+			};
 		}
 
 		io.query(signedQuery,function(message){
@@ -78,11 +79,11 @@ Template.header.events({
 		if(searchquery == null) return;
 
 		$(ev.target).attr('disabled','disabled');
-		Session.set('searchicon','<img src="/load.gif">')
+		Session.set('searchicon','<img src="/load.gif">');
 
 		if(heatmap != null) heatmap.setMap(null);
 		getJobDaytr(searchquery, function(err,allResults) {
-			var jobMapData = []
+			var jobMapData = [];
 			_.chain(allResults)
 			.pluck("employment_tenure/person/places_lived/location/topic:name")
 			.each(function(locationString) {
