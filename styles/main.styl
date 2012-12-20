@@ -111,7 +111,7 @@ noisy-bg()
 		border 0 none
 		text-decoration none
 
-.navbar.not-fixed
+.navbar
 	noisy-bg()
 	.brand
 		padding 0
@@ -125,9 +125,6 @@ noisy-bg()
 		background-image url("/headerbg.png")
 		background-size 200px 200px
 		background-repeat repeat
-
-	&.navbar-fixed-top
-		position static
 
 
 .form-search.bigass
@@ -155,15 +152,36 @@ noisy-bg()
 			border-color #0044cc #0044cc #002a80
 			text-shadow 0 -1px 0 #001230
 
+.sidebar.right
+	h4
+		margin-bottom 0
+	h2
+		margin-top 0
+	h1,h2,h4
+		text-align right
+	&:last-child
+		h1,h2,h4
+			text-align left
+
+	.winning
+		color #468C00
+	.stat
+		font-family "Roboto Medium Italic"
+	h1
+		font-family "Roboto Medium"
+
+
 
 .full-height
 	padding 0
 	height 100%
 	&.container-fluid
+		margin-top 61px
 		height calc('100% - 60px - 1px')
 
 #map_canvas
 	height: 100%
+	position fixed
 
 .sidebar
 	height calc('100% - 60px - 1px')

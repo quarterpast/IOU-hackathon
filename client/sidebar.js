@@ -14,11 +14,43 @@ Template.sidebar.factors = [
 var locations = [
 	{
 		name:"London",
-		lat: 51.514832, lng:-0.088946
+		lat: 51.514832, lng:-0.088946,
+		stats:[
+			{name:"Population",value:"8278251"},
+			{name:"Unemployed",value:"223742"},
+			{name:"Engineering Jobs",value:2424},
+			{name:"Crime",value:"4674"},
+			{name:"Health Care System Index",value:"65.9"},
+			{name:"House Price to Income Ratio",value:"15.31"},
+			{name:"Mortgage as % of income",value:"121.27%"},
+			{name:"Pollution index",value:"57.46"},
+			{name:"Traffic Index",value:"170.48"},
+			{name:"Time index",value:"51.56"},
+			{name:"Commuters CO<sub>2</sub>",value:"121.85"},
+			{name:"Beer Index",value:"£4"},
+			{name:"Utilities",value:"£168"},
+			{name:"Rent for 1 bed flat",value:"£900"}
+		]
 	},
 	{
 		name:"Nottingham",
-		lat: 52.947808, lng:-1.218309
+		lat: 52.947808, lng:-1.218309,
+		stats:[
+			{name:"Population",value:"666358"},
+			{name:"Unemployed",value:"13611"},
+			{name:"Engineering Jobs",value:20638},
+			{name:"Crime",value:"1740"},
+			{name:"Health Care System Index",value:"79.63"},
+			{name:"House Price to Income Ratio",value:"6.52"},
+			{name:"Mortgage as % of income",value:"51.65%"},
+			{name:"Pollution index",value:"41.81"},
+			{name:"Traffic Index",value:"46.37"},
+			{name:"Time index",value:"15"},
+			{name:"Commuters CO<sub>2</sub>",value:"443.33"},
+			{name:"Beer Index",value:"£3"},
+			{name:"Utilities",value:"£139"},
+			{name:"Rent for 1 bed flat",value:"£375"}
+		]
 	}
 ];
 Session.set('locations',[]);
