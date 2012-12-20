@@ -16,33 +16,31 @@ if(Meteor.isClient) {
 				console.log(schoolRequest);
 
 				_.each(schoolRequest.data.results, function(result) {
-					Meteor.setTimeout(function() {
-						if(result.location.address.toLowerCase().indexOf("london") >= 0 || result.location.address.toLowerCase().indexOf("nottingham") >= 0) {
+					if(result.location.address.toLowerCase().indexOf("london") >= 0 || result.location.address.toLowerCase().indexOf("nottingham") >= 0) {
 
-							//console.log("looking for cache result", result.title);
-							if(SchoolData.findOne({
-								"title": result.title
-							}) !== null) {
-								//do nothing here
-								console.log("found in cache " + result.title);
-								cachecount++;
-							} else {
-								geocodeAddress(_.last(result.location.address.split(',')), function(err, latLng) {
-									if(err) {
-										console.log(err);
-										return;
-									} else {
-										console.log(cachecount);
-										console.log("inserting school " + result.location.address + " geocode: " + latLng);
-										SchoolData.insert({
-											title: result.title,
-											latLng: latLng
-										});
-									}
-								});
-							}
+						//console.log("looking for cache result", result.title);
+						if(SchoolData.findOne({
+							"title": result.title
+						}) !== null) {
+							//do nothing here
+							console.log("found in cache " + result.title);
+							cachecount++;
+						} else {
+							geocodeAddress(_.last(result.location.address.split(',')), function(err, latLng) {
+								if(err) {
+									console.log(err);
+									return;
+								} else {
+									console.log(cachecount);
+									console.log("inserting school " + result.location.address + " geocode: " + latLng);
+									SchoolData.insert({
+										title: result.title,
+										latLng: latLng
+									});
+								}
+							});
 						}
-					});
+					}
 				});
 			});
 		});
