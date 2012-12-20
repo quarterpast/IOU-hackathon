@@ -3,13 +3,14 @@
 		{{#each factors}}
 			<div class="sidebar-section">
 				<h2>
+					<i class="icon-large icon-reorder"></i>
 					{{name}}
 					{{#if sub}}
 						<a href="#toggle" class="toggler pull-right"><i class="icon-large icon-caret-right"></i></a>
 					{{/if}}
 				</h2>
 				<div class="subs">
-					{{#each sub}}<h4>{{.}}</h4>{{/each}}
+					{{#each sub}}<h4><input type="checkbox" value="{{.}}"> {{.}}</h4>{{/each}}
 				</div>
 			</div>
 		{{/each}}

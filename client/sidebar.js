@@ -20,6 +20,16 @@ Template.sidebar.events({
 			.closest('.sidebar-section')
 			.find('.subs')
 			.toggle();
+	},
+	"change [type='checkbox']": function(ev) {
+		switch(ev.target.value) {
+			case "School Locations":
+				alert("School locations is "+(ev.target.checked ? "enabled" : "disabled"));
+				break;
+			case "Hospitals":
+				alert("Hospitals is "+(ev.target.checked ? "enabled" : "disabled"));
+				break;
+		}
 	}
 });
 
