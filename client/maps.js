@@ -111,3 +111,7 @@ if(Meteor.isClient) {
 		});
 	};
 }
+
+Template.map.locationSidebar = function() {
+	return Session.get('locations');
+};

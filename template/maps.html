@@ -2,5 +2,8 @@
 	<div class="map-container">
 		{{> sidebar}}
 		<div id="map_canvas" class="map-panel"></div>
+		{{#each locationSidebar}}
+			{{> locationSidebar}}
+		{{/each}}
 	</div>
 </template>
