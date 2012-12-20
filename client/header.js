@@ -2,8 +2,9 @@ var queries = {};
 
 function getJobDaytr(jobSearchTerm, gotDaytr) {
 	var completeResults = [];
+	var requestId =  'request-'+Date.now()+'-'+jobSearchTerm
 	Meteor.call('signQuery',{
-		requestId: 'request-'+Date.now()+'-'+jobSearchTerm,
+		requestId: requestId,
 		connectorGuids: _.chain(connectrs).values().reject(_.isEmpty).value(),
 		input: {'job_title/topic:description': jobSearchTerm},
 		maxPages: 100
