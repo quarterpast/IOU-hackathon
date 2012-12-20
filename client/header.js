@@ -133,7 +133,7 @@ function getJobDaytr(jobSearchTerm, gotDaytr) {
 
 var heatmap, searchquery, searchcontexts;
 
-Session.set('showsplash',true);
+Session.set('showsplash',false);
 Session.set('searchicon','<i class="icon-search"></i>');
 Template.splash.searchIcon = Template.header.searchIcon = function() {
 	return Session.get('searchicon');
