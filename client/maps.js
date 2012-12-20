@@ -81,34 +81,6 @@ if(Meteor.isClient) {
 			});
 		});
 	}
-	
-	function showHospitalMarkers()
-	{
-		_.each(hospitalMarkers, function(marker) {
-			marker.setVisible(true);
-		});
-	}
-	
-	function hideHospitalMarkers()
-	{
-		_.each(hospitalMarkers, function(marker) {
-			marker.setVisible(false);
-		});
-	}
-	
-	function showSchoolMarkers()
-	{
-		_.each(schoolMarkers, function(marker) {
-			marker.setVisible(true);
-		});
-	}
-	
-	function hideSchoolMarkers()
-	{
-		_.each(schoolMarkers, function(marker) {
-			marker.setVisible(false);
-		});
-	}
 
 	function pinSchool(latLng,name, clickCallback) {
 		var img = 'schools.png';
@@ -116,7 +88,8 @@ if(Meteor.isClient) {
 			position: latLng,
 			map: map,
 			title: name,
-			icon: img
+			icon: img,
+			visible: false
 		});
 		google.maps.event.addListener(addedPin, 'click', clickCallback);
 		return addedPin;
@@ -138,7 +111,8 @@ if(Meteor.isClient) {
 			position: latLng,
 			map: map,
 			title: name,
-			icon: img
+			icon: img,
+			visible: false
 		});
 		google.maps.event.addListener(addedPin, 'click', function() {
 			console.log("pinned");
@@ -173,9 +147,9 @@ if(Meteor.isClient) {
 		
 		getSchools();
 
-		getHospDaytr("Nottingham", gotHospitalDaytr);
+		//getHospDaytr("Nottingham", gotHospitalDaytr);
 		
-		//getHospDaytr("London", gotHospitalDaytr);
+		getHospDaytr("London", gotHospitalDaytr);
 
 		
 		

@@ -13,6 +13,36 @@ Template.sidebar.factors = [
 
 Session.set('locations',[])
 
+function showHospitalMarkers()
+{
+	_.each(hospitalMarkers, function(marker) {
+		marker.setVisible(true);
+	});
+}
+
+function hideHospitalMarkers()
+{
+	_.each(hospitalMarkers, function(marker) {
+		marker.setVisible(false);
+	});
+}
+
+function showSchoolMarkers()
+{
+	_.each(schoolMarkers, function(marker) {
+		marker.setVisible(true);
+	});
+}
+
+function hideSchoolMarkers()
+{
+	_.each(schoolMarkers, function(marker) {
+		marker.setVisible(false);
+	});
+}
+
+
+
 Template.sidebar.events({
 	"click [href='#toggle']": function(ev) {
 		ev.preventDefault();
@@ -26,10 +56,12 @@ Template.sidebar.events({
 	"change [type='checkbox']": function(ev) {
 		switch(ev.target.value) {
 			case "School Locations":
-				alert("School locations is "+(ev.target.checked ? "enabled" : "disabled"));
+				ev.target.checked ? showSchoolMarkers() : hideSchoolMarkers();
+				
 				break;
 			case "Hospitals":
-				alert("Hospitals is "+(ev.target.checked ? "enabled" : "disabled"));
+				ev.target.checked ? showHospitalMarkers() : hideHospitalMarkers();
+				
 				break;
 		}
 	}

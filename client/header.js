@@ -7,7 +7,7 @@ function getHospDaytr(hospSearchTerm, gotDaytr) {
 		requestId: requestId,
 		connectorGuids: _.chain(hospconnectrs).values().reject(_.isEmpty).value(),
 		input: {'location/topic:name': hospSearchTerm},
-		maxPages: 2
+		maxPages: 6
 	},function(err,signedQuery) {
 		if(err) return gotDaytr(err);
 		console.log(signedQuery);
