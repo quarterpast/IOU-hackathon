@@ -188,3 +188,16 @@ searchEvents = {
 
 Template.header.events(searchEvents);
 Template.splash.events(searchEvents);
+
+var locations = [
+	{name:"London"},
+	{name:"Nottingham"}
+];
+
+Template.header.events({
+	"click .btn-pin": function() {
+		Session.set('location',
+			Session.get('location').concat(locations.shift())
+		);
+	}
+})

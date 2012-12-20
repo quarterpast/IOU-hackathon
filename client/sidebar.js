@@ -11,6 +11,8 @@ Template.sidebar.factors = [
 	{name:"Wellbeing"}
 ];
 
+Session.set('locations',[])
+
 Template.sidebar.events({
 	"click [href='#toggle']": function(ev) {
 		ev.preventDefault();
