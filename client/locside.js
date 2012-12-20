@@ -26,14 +26,14 @@ Template.locationSidebar.crimePerThou = function() {
 	return 1000*crime/popul;
 };
 
-Template.locationSidebar.winning = function(name) {
-	if(Session.get('locations').length > 1 && this.sort != null) {
-		var l = _.chain(Session.get('locations')).map(function(loc) {
-			return _.find(loc.stats,function(it){return it.name == name;});
-		}).pluck('value').map(parseFloat);
+// Template.locationSidebar.winning = function(name) {
+// 	if(Session.get('locations').length > 1 && this.sort != null) {
+// 		var l = _.chain(Session.get('locations')).map(function(loc) {
+// 			return _.find(loc.stats,function(it){return it.name == name;});
+// 		}).pluck('value').map(parseFloat);
 		
-		if(this.sort > 0) return l.max().value() == this.value;
-		else return l.min().value() == this.value;
-	}
-	return false;
-};
+// 		if(this.sort > 0) return l.max().value() == this.value;
+// 		else return l.min().value() == this.value;
+// 	}
+// 	return false;
+// };
