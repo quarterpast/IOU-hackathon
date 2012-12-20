@@ -1,9 +1,14 @@
 GeocodeResults = new Meteor.Collection('geocode');
 SchoolData = new Meteor.Collection('schools');
 
-var lastRequest = Date.now();
-
 function geocodeAddress(addressString, callback) {
+	if(callback==null)
+		console.log(arguments.callee.caller.toString());
+	else
+	{
+		console.log(callback);
+		return;
+	}
 	//convert the result to a latlng instead of the horrible crap that google sends back
 	var timeSinceLast = Date.now() - lastRequest;
 	if(timeSinceLast < 400) {
