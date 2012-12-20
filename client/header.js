@@ -161,6 +161,7 @@ searchEvents = {
 			_.chain(allResults)
 			.pluck("employment_tenure/person/places_lived/location/topic:name")
 			.each(function(locationString) {
+				var geo;
 				if(geo = GeocodeResults.findOne({loc:locationString})) {
 					console.log("mongo cache hit %s",locationString);
 					console.log(geo.latLng);

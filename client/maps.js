@@ -20,7 +20,7 @@ if(Meteor.isClient) {
 			console.log(locationString);
 			var hospitalScore = singleresult["location/topic:description"];
 			var hospitalName = singleresult["location/topic:name"];
-
+			var geo;
 			if(geo = GeocodeResults.findOne({loc:locationString})) {
 				console.log("mongo cache hit %s",locationString);
 				console.log(geo.latLng);
@@ -51,7 +51,7 @@ if(Meteor.isClient) {
 				_.each(schoolRequest.data.results, function(result) {
 					if(result.location.address.toLowerCase().indexOf("london") >= 0 || result.location.address.toLowerCase().indexOf("nottingham") >= 0) {
 						
-						sch = SchoolData.findOne({"title": result.title});
+						var sch = SchoolData.findOne({"title": result.title});
 						//console.log("looking for cache result", result.title);
 						if(typeof sch !== "undefined") {
 							//do nothing here
@@ -111,7 +111,7 @@ if(Meteor.isClient) {
 	}
 
 	function pinSchool(latLng,name, clickCallback) {
-		var img = 'favicon.ico';
+		var img = 'schools.png';
 		var addedPin = new google.maps.Marker({
 			position: latLng,
 			map: map,
@@ -133,7 +133,7 @@ if(Meteor.isClient) {
 	}
 	
 	function pinHospital(latLng, name) {
-		var img = 'favicon.ico';
+		var img = 'hospitals.png';
 		var addedPin = new google.maps.Marker({
 			position: latLng,
 			map: map,
@@ -171,11 +171,11 @@ if(Meteor.isClient) {
 
 		geocodr = new google.maps.Geocoder();
 		
-		//getSchools();
+		getSchools();
 
 		getHospDaytr("Nottingham", gotHospitalDaytr);
 		
-		getHospDaytr("London", gotHospitalDaytr);
+		//getHospDaytr("London", gotHospitalDaytr);
 
 		
 		
