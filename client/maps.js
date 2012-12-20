@@ -4,7 +4,7 @@ if(Meteor.isClient) {
 	schoolMarkers = [];
 	hospitalMarkers = [];
 
-	var cachecount = 0;
+	
 	
 	function gotHospitalDaytr(err,allResults) {
 		//connector guid hospitals 20621576-8982-4001-af32-ec1bdd47797c
@@ -36,6 +36,7 @@ if(Meteor.isClient) {
 	}
 
 	function getSchools(callback) {
+		var cachecount = 0;
 		_.each("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(''), function(nextChar) {
 			Meteor.http.get("https://data.kusiri.com/search/q/55938856-2557-4c6e-92ae-0bd94f3a29c9?q=" + nextChar, {
 				headers: {
@@ -48,18 +49,22 @@ if(Meteor.isClient) {
 				}
 				console.log(schoolRequest);
 
+				var schoolcount = 0;
 				_.each(schoolRequest.data.results, function(result) {
 					if(result.location.address.toLowerCase().indexOf("london") >= 0 || result.location.address.toLowerCase().indexOf("nottingham") >= 0) {
 						
+						if(schoolcount>20) return; //max 200 schools
 						var sch = SchoolData.findOne({"title": result.title});
+						schoolcount++;
 						//console.log("looking for cache result", result.title);
 						if(typeof sch !== "undefined") {
 							//do nothing here
 							console.log("found in cache " + result.title);
 							cachecount++;
 							
+							
 							schoolMarkers.push(pinSchool(new google.maps.LatLng(sch.latLng.Ya,sch.latLng.Za), result.title , function() {
-								
+							
 							}));
 						} else {
 							geocodeAddress(_.last(result.location.address.split(',')), function(err, latLng) {

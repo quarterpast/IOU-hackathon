@@ -5,37 +5,35 @@ SidebarData = new Meteor.Collection('sidebar');
 var lastRequest = Date.now();
 
 function geocodeAddress(addressString, geocodeCallback) {
+	var geocoder = new google.maps.Geocoder();
 	//convert the result to a latlng instead of the horrible crap that google sends back
 	var timeSinceLast = Date.now() - lastRequest;
-	if(timeSinceLast < 400) {
+	if(timeSinceLast < 1100) {
 		return Meteor.setTimeout(function() {
 			geocodeAddress(addressString, geocodeCallback);
-		}, 400-timeSinceLast);
+		}, 1100-timeSinceLast);
 	} else {
 		lastRequest = Date.now();
-		Meteor.http.get(
-			"http://api.geonames.org/postalCodeLookupJSON",
-			{params:{
-				placename:addressString,
-				country:'GB',   // restricts to results in UK
-				isReduced:true, // increases rank of exact text match
-				username:'quarterto'
-			}},
-			function(err,result) {
-				console.log(result, err);
-				var len = result.data.postalcodes.length;
-				if(err || len === 0)
-				{
-					geocodeCallback(err);
-					return;
-				}
+		geocoder.geocode({'address':addressString}, function(results, status)
+			{
+				console.log(results, status);
 				
-				var idx = Math.floor(Math.random()*len); // random results to spread out the blobs
-				console.log(result.data);
-				geocodeCallback(null,{
-					Ya: result.data.postalcodes[idx].lat,
-					Za: result.data.postalcodes[idx].lng
-				});
+				if(status!=google.maps.GeocoderStatus.OK)
+				{
+					//geocodeCallback(status || {error:"nothing returned lol"});
+					
+				}
+				else
+				{
+					var idx = Math.floor(Math.random()*results.length); // random results to spread out the blobs
+	//				console.log(results.data);
+					geocodeCallback(null,{
+						Ya: results[idx].geometry.location.Ya,
+						Za: results[idx].geometry.location.Za
+					});
+				}
+			
+			
 			}
 		);
 	}

@@ -69,6 +69,8 @@ function getHospDaytr(hospSearchTerm, gotDaytr) {
 }
 
 function getJobDaytr(jobSearchTerm, gotDaytr) {
+	
+	console.log("jobsearch:",jobSearchTerm);
 	var completeResults = [];
 	var requestId =  'request-'+Date.now()+'-'+jobSearchTerm
 	Meteor.call('signQuery',{
@@ -156,20 +158,35 @@ searchEvents = {
 		Session.set('searchicon','<img src="/load.gif">');
 
 		if(heatmap != null) heatmap.setMap(null);
+		console.log("jobsearch:",searchquery);
 		getJobDaytr(searchquery, function(err,allResults) {
 			var jobMapData = [];
 			_.chain(allResults)
 			.pluck("employment_tenure/person/places_lived/location/topic:name")
 			.each(function(locationString) {
+				console.log(locationString);
 				var geo;
 				if(geo = GeocodeResults.findOne({loc:locationString})) {
 					console.log("mongo cache hit %s",locationString);
-					console.log(geo.latLng);
-					jobMapData.push(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za));
+					if(typeof geo == "undefined" || typeof geo.latLng == "undefined" || typeof geo.latLng.Ya == "undefined" || typeof geo.latLng.Za == "undefined") 
+					{
+						console.log("bad cache result");
+					}
+					else
+					{
+						console.log(geo.latLng);
+						jobMapData.push(new google.maps.LatLng(geo.latLng.Ya,geo.latLng.Za));
+					}
 				} else geocodeAddress(locationString,function(err,latLng) {
-					if(err) return console.log(err);
-					GeocodeResults.insert({loc:locationString,latLng:latLng});
-					jobMapData.push(latLng);
+					if(err) 
+					{
+						console.log(err);
+					}
+					else
+					{
+						GeocodeResults.insert({loc:locationString,latLng:latLng});
+						jobMapData.push(latLng);
+					}
 				});
 			});
 			heatmap = new google.maps.visualization.HeatmapLayer({
