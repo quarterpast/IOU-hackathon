@@ -16,9 +16,15 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&amp;key=AIzaSyDSs7FSlpD-LXM3YEHZCRBWP-f-NE9VJH8&amp;sensor=false"></script>
 </head>
 
-<body>
-	{{> header}}
-	<div class="container-fluid full-height">
-		{{> map}}
-	</div>
-</body>
+<body>{{> content}}</body>
+
+<template name="content">
+	{{#if showsplash}}
+		{{> splash}}
+	{{else}}
+		{{> header}}
+		<div class="container-fluid full-height">
+			{{> map}}
+		</div>
+	{{/if}}
+</template>

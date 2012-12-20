@@ -63,19 +63,25 @@ function getJobDaytr(jobSearchTerm, gotDaytr) {
 	});
 }
 
-var heatmap, searchquery;
+var heatmap, searchquery, searchcontexts;
 
+Session.set('showsplash',true);
 Session.set('searchicon','<i class="icon-search"></i>');
-Template.header.searchIcon = function() {
-	return Session.get('searchicon')
+Template.splash.searchIcon = Template.header.searchIcon = function() {
+	return Session.get('searchicon');
+}
+Template.content.showsplash = function() {
+	return Session.get('showsplash');
 }
 
-Template.header.events({
+
+searchEvents = {
 	"blur input": function(ev) {
 		searchquery = ev.target.value;
 	},
 	"click button": function(ev) {
 		ev.preventDefault();
+		if(Session.equals('showsplash',true)) Session.set('showsplash',false);
 		if(searchquery == null) return;
 
 		$(ev.target).attr('disabled','disabled');
@@ -109,4 +115,7 @@ Template.header.events({
 
 		});
 	}
-});
+};
+
+Template.header.events(searchEvents);
+Template.splash.events(searchEvents);

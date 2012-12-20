@@ -1,15 +1,18 @@
 <template name="header">
 	<header class="navbar navbar-fixed-top navbar-inverse not-fixed">
 		<nav class="navbar-inner">
-			<a class="brand" href="#">
-				<img src="/logo-light.png" alt="Relocatr" height="48" width="228">
-			</a>
-			<form class="navbar-form pull-right form-search">
-				<div class="input-append">
-					<input type="text" class="input-large search-query" placeholder="Search for jobs&hellip;">
-					<button class="btn btn-primary add-on">{{{searchIcon}}}</button>
-				</div>
-			</form>
+			<div class="container-fluid">
+				<a href="#" class="btn btn-navbar"><i class="icon-map-marker"></i>Pin a location&hellip;</a>
+				<a class="brand" href="#">
+					<img src="/logo-light.png" alt="Relocatr" height="48" width="228">
+				</a>
+				<form class="navbar-form pull-right form-search bigass">
+					<div class="input-append">
+						<input type="text" class="input-large search-query" placeholder="Search for jobs&hellip;">
+						<button class="btn btn-primary add-on">{{{searchIcon}}}</button>
+					</div>
+				</form>
+			</div>
 		</nav>
 	</header>
 </template>

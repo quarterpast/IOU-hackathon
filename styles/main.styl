@@ -21,7 +21,11 @@ p
 h1, h2, h3, h4, h5, h6
 	font-family "Roboto Thin"
 	em
+		font-size inherit
 		font-family "Roboto Thin Italic"
+	strong
+		font-size inherit
+		font-family "Roboto Medium"
 
 	font-weight 300
 	margin 1rem 0 0.5rem
@@ -58,10 +62,39 @@ noisy-bg()
 	background-size 50px 50px
 	background-repeat repeat
 
+.splash
+	text-align center
+	background-image url("/splashbg.png")
+	background-size 200px 200px
+	background-repeat repeat
+
+	height 100%
+
+	h1
+		padding-top 160px
+		margin 0
+	h2
+		letter-spacing -0.05em
+		font-size 70px
+
+	.form-search.bigass
+		margin-top 2em
+		line-height 80px
+		.search-query
+			height 38px
+			border-radius 28px
+
+		.input-append
+			.btn.add-on
+				i
+					font-size 24px
+				height 38px
+				width 38px
+				border-radius right 28px
+
 .navbar.not-fixed
 	noisy-bg()
 	.brand
-		margin 0
 		padding 0
 		&:hover
 			border 0 none
@@ -74,34 +107,35 @@ noisy-bg()
 		background-size 200px 200px
 		background-repeat repeat
 
-	.navbar-form
-		line-height 60px
-		margin-right 10px
-		input, button
-			margin 0
-		.search-query
-			height 28px
-			border-radius 18px
-			font-size 18px
-
-		.input-append
-			margin 0
-			.search-query
-				border-radius right 0
-			.btn.add-on
-				i
-					font-size 19px
-					line-height 1em
-				box-sizing content-box
-				margin-left -1px
-				height 28px
-				width 28px
-				border-radius right 18px
-				border-color #0044cc #0044cc #002a80
-				text-shadow 0 -1px 0 #001230
-
 	&.navbar-fixed-top
 		position static
+
+
+.form-search.bigass
+	line-height 60px
+	input, button
+		margin 0
+	.search-query
+		height 28px
+		border-radius 18px
+		font-size 18px
+
+	.input-append
+		margin 0
+		.search-query
+			border-radius right 0
+		.btn.add-on
+			i
+				font-size 19px
+				line-height 1em
+			box-sizing content-box
+			margin-left -1px
+			height 28px
+			width 28px
+			border-radius right 18px
+			border-color #0044cc #0044cc #002a80
+			text-shadow 0 -1px 0 #001230
+
 
 .full-height
 	padding 0
