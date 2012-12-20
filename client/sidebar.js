@@ -12,8 +12,14 @@ Template.sidebar.factors = [
 ];
 
 var locations = [
-	{name:"London"},
-	{name:"Nottingham"}
+	{
+		name:"London",
+		lat: 51.514832, lng:-0.088946
+	},
+	{
+		name:"Nottingham",
+		lat: 52.947808, lng:-1.218309
+	}
 ];
 Session.set('locations',[]);
 
@@ -45,6 +51,15 @@ function hideSchoolMarkers()
 	});
 }
 
+function pinLocation(latLng, clickCallback) {
+	var img = 'favicon.ico';
+	var addedPin = new google.maps.Marker({
+		position: latLng,
+		map: map,
+		icon: img
+	});
+	google.maps.event.addListener(addedPin, 'click', clickCallback);
+}
 
 
 Template.sidebar.events({
@@ -71,9 +86,13 @@ Template.sidebar.events({
 	},
 	"click .btn-pin": function(ev) {
 		ev.preventDefault();
+		var loc = locations.shift();
+		if(loc == null) return;
+
 		Session.set('locations',
-			Session.get('locations').concat(locations.shift())
+			Session.get('locations').concat(loc)
 		);
+		pinLocation(new google.maps.LatLng(loc.lat,loc.lng),function(){});
 	}
 });
 
