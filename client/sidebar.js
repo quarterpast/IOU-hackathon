@@ -11,7 +11,11 @@ Template.sidebar.factors = [
 	{name:"Wellbeing"}
 ];
 
-Session.set('locations',[])
+var locations = [
+	{name:"London"},
+	{name:"Nottingham"}
+];
+Session.set('locations',[]);
 
 function showHospitalMarkers()
 {
@@ -64,9 +68,17 @@ Template.sidebar.events({
 				
 				break;
 		}
+	},
+	"click .btn-pin": function(ev) {
+		ev.preventDefault();
+		Session.set('locations',
+			Session.get('locations').concat(locations.shift())
+		);
 	}
 });
 
 Template.sidebar.rendered = function() {
 	$('.subs').hide();
 };
+
+
